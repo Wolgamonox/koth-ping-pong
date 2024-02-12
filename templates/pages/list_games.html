@@ -1,22 +1,9 @@
 {% extends "../base.html" %}
 
-{% block head %}
-<style>
-    .games-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
-        justify-items: stretch;
-        align-items: stretch;
-    }
-</style>
-{% endblock head %}
-
 {% block content %}
 <h1>This is the games page</h1>
 
-<div class="games-grid">
+<div>
     {% for game in games %}
     <div>
         <h3>Game n°{{ game.id }}</h3>

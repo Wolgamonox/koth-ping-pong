@@ -1,0 +1,3 @@
+cargo watch -x 'shuttle run' --ignore 'assets/*'
+
+.\tailwindcss.exe -i .\tailwind\input.css -o .\assets\css\output.css --watch

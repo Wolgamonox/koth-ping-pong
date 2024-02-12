@@ -5,11 +5,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="/assets/css/output.css" />
-  {% block head %}{% endblock head %}
-  <title>{% block title %}{{ title }} - Koth Ping Pong{% endblock title %}</title>
+  <script src="/assets/js/htmx.min.js"></script>
+  {% block head %}{% endblock %}
+  <title>{% block title %}{{ title }} - Koth Ping Pong{% endblock %}</title>
 </head>
 
 <body>
+  <nav class="container bg-slate-400 p-4  ">
+    <ul>
+      <li>
+        <a href="/" class="text">Home</a>
+        <a href="/games">Games</a>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="container"></main>
+
   {% block content %}{% endblock %}
 </body>
 

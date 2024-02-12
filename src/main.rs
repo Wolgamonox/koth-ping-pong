@@ -7,10 +7,14 @@ use tower_http::services::ServeDir;
 
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
-    let router = Router::new()
+    let mut router = Router::new()
         .route("/", get(index))
         .route("/games", get(list_games))
         .nest_service("/assets", ServeDir::new("assets"));
+
+    if cfg!(debug_assertions) {
+        router = router.layer(tower_livereload::LiveReloadLayer::new());
+    }
 
     Ok(router.into())
 }
