@@ -1,15 +1,26 @@
 use std::vec;
 
 use askama::Template;
-use axum::{response::IntoResponse, routing::get, Router};
+use axum::{extract::State, response::IntoResponse, routing::get, Router};
 
 use tower_http::services::ServeDir;
 
+#[derive(Clone)]
+struct AppState {
+    active_page: String,
+}
+
+
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
+
+    let state = AppState { active_page: "Home".to_string()};
+
     let mut router = Router::new()
         .route("/", get(index))
         .route("/games", get(list_games))
+        .route("/about", get(about))
+        .with_state(state)
         .nest_service("/assets", ServeDir::new("assets"));
 
     if cfg!(debug_assertions) {
@@ -25,11 +36,25 @@ struct IndexTemplate {
     title: String,
 }
 
-async fn index() -> impl IntoResponse {
+async fn index(State(state): State<AppState>) -> impl IntoResponse {
     IndexTemplate {
+        state: State,
         title: "Home".to_string(),
     }
 }
+
+#[derive(Template)]
+#[template(path = "pages/about.html")]
+struct AboutTemplate {
+    title: String,
+}
+
+async fn about(State(state): State<AppState>) -> impl IntoResponse {
+    AboutTemplate {
+        title: "About".to_string(),
+    }
+}
+
 
 #[derive(Template)]
 #[template(path = "pages/list_games.html")]
@@ -38,7 +63,7 @@ struct ListGamesTemplate {
     games: Vec<Game>,
 }
 
-async fn list_games() -> impl IntoResponse {
+async fn list_games(State(state): State<AppState>) -> impl IntoResponse {
     ListGamesTemplate {
         title: "Games".to_string(),
         games: vec![
@@ -55,3 +80,4 @@ async fn list_games() -> impl IntoResponse {
 struct Game {
     id: u32,
 }
+
